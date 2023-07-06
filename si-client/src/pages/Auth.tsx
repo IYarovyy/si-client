@@ -3,25 +3,25 @@ import { siApi, LoginData, DefaultApiAuthLoginPostRequest } from '@shared/api/us
 import React, { useEffect, useState } from 'react';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 
-import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 import { pageRoutes } from '../routes';
 import { toast } from 'react-toastify';
 import { useQueryClient } from 'react-query';
-import {useToken} from '@hooks/use_token'
-import {AxiosError} from 'axios'
+import { useProfile, decodeProfile } from '@hooks/use_profile'
+import { AxiosError } from 'axios'
 
 const Auth = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
-  const { setToken } = useToken();
+  const { profile, setProfile } = useProfile();
+
 
   const [btnLoading, setBtnLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (Cookies.get('token')) {
+    if (profile) {
       history.replace(pageRoutes.main);
     }
   }, []);
@@ -31,12 +31,11 @@ const Auth = () => {
     setBtnLoading(true);
     try {
       const loginData: DefaultApiAuthLoginPostRequest = {
-        loginData: {email: email,password: password}
+        loginData: { email: email, password: password }
       }
       const resp = await siApi.authLoginPost(loginData);
       if (resp.data.access_token) {
-        Cookies.set('token', resp.data.access_token);
-        setToken(resp.data.access_token);
+        setProfile(decodeProfile(resp.data.access_token))
         history.replace(pageRoutes.main);
         queryClient.invalidateQueries();
       } else {
@@ -53,8 +52,11 @@ const Auth = () => {
     } catch (error) {
       var msg = "Authorization failed"
       if (error instanceof AxiosError && typeof error.response !== 'undefined') {
-        msg = error.response.data.message
-      } 
+        if (error.response.status == 401)
+          msg = "Bad email or password"
+        else if (error.response.status == 0)
+          msg = "Server unavailable"
+      }
 
       toast.error(msg, {
         position: 'bottom-left',

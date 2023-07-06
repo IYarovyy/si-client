@@ -1,26 +1,29 @@
 import './App.css'
 import { AppBar, Box, Toolbar } from '@mui/material';
-import {useToken} from '@hooks/use_token';
+import { useProfile } from '@hooks/use_profile';
 import { pageRoutes } from './routes';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import Auth from './pages/Auth';
+import Auth from '@pages/Auth';
 import SoundCheck from '@pages/SoundCheck';
+import ProfileMenu from '@components/ProfileMenu'
+import { useEffect } from 'react';
 
 function App() {
-  const { token } = useToken();
-
+  const { profile } = useProfile();
   const history = useHistory();
 
-  if(!token) {
-    history.replace(pageRoutes.auth);
-  }
-  
+  useEffect(() => {
+    if (!profile) {
+      history.replace(pageRoutes.auth);
+    }
+  }, [profile]);
+
   return (
     <>
       <AppBar position="static">
         <Toolbar variant="dense">
           <Box display="flex" justifyContent="flex-end" width="100%">
-            <div>Usedr Profile</div>
+            <ProfileMenu />
           </Box>
         </Toolbar>
       </AppBar>

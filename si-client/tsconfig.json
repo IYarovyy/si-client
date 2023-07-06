@@ -28,6 +28,7 @@
       "@widgets/*": ["widgets/*"],
       "@app/*": ["app/*"],
       "@pages/*": ["pages/*"],
+      "@components/*": ["components/*"],
       "@processes/*": ["processes/*"]
     }
   },
