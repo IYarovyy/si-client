@@ -947,6 +947,13 @@ asynckit@^0.4.0:
   resolved "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
+axios-jwt@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/axios-jwt/-/axios-jwt-2.0.0.tgz#5a1bad2db74f003416d2c172bfe230711fb7f404"
+  integrity sha512-ABbVdPNAKJ9gLqPgW37a21VuiRSWoyjroL90hDfBNBZvqATJyNSOErEp0IBfk8lRBW3Uwrm6PBsq3KPf/Bbflw==
+  dependencies:
+    jwt-decode "^3.1.2"
+
 axios@0.27.2:
   version "0.27.2"
   resolved "https://registry.npmjs.org/axios/-/axios-0.27.2.tgz"

@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { useProfile } from '@hooks/use_profile';
-import React from 'react';
+import React, { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -8,9 +8,16 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Logout from '@mui/icons-material/Logout';
 import Typography from '@mui/material/Typography';
+import { logout, useAuthState, useAuthDispatch } from '@contexts/index';
+import { useHistory } from 'react-router-dom';
+import { paths } from 'routes';
+
 
 const ProfileMenu = () => {
-    const { profile } = useProfile();
+    const history = useHistory();
+
+    const profile = useAuthState();
+    const dispatch = useAuthDispatch();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -19,6 +26,10 @@ const ProfileMenu = () => {
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+    const handleLogout = () => {
+        logout(dispatch);
+        history.replace(paths.auth);
     };
 
     if (!profile) {
@@ -77,7 +88,7 @@ const ProfileMenu = () => {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={handleLogout}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>

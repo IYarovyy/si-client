@@ -1,6 +1,6 @@
-import React from 'react';
+import { FC } from 'react';
 
-const SoundCheck = () => {
+const SoundCheck: FC = () => {
     return (
         <h2>SoundCheck</h2>
     );

@@ -1,45 +1,30 @@
-import { siApi, LoginData, DefaultApiAuthLoginPostRequest } from '@shared/api/user-client/si-api';
 
-import React, { useEffect, useState } from 'react';
-import { Alert, Box, Button, TextField, Typography } from '@mui/material';
+import React, { Component, useState } from 'react';
+import { FC } from "react";
+import { paths } from "../routes"
+
+
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 import { useHistory } from 'react-router-dom';
-import { pageRoutes } from '../routes';
+// import { pageRoutes } from '../routes';
 import { toast } from 'react-toastify';
-import { useQueryClient } from 'react-query';
-import { useProfile, decodeProfile } from '@hooks/use_profile'
-import { AxiosError } from 'axios'
+import { loginUser, useAuthState, useAuthDispatch } from '@contexts/index';
 
-const Auth = () => {
+const Auth: FC = () => {
   const history = useHistory();
-  const queryClient = useQueryClient();
-  const { profile, setProfile } = useProfile();
+  const dispatch = useAuthDispatch();
+  const { loading, errorMessage } = useAuthState();
 
-
-  const [btnLoading, setBtnLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    if (profile) {
-      history.replace(pageRoutes.main);
-    }
-  }, []);
-
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    setBtnLoading(true);
     try {
-      const loginData: DefaultApiAuthLoginPostRequest = {
-        loginData: { email: email, password: password }
-      }
-      const resp = await siApi.authLoginPost(loginData);
-      if (resp.data.access_token) {
-        setProfile(decodeProfile(resp.data.access_token))
-        history.replace(pageRoutes.main);
-        queryClient.invalidateQueries();
-      } else {
-        toast.error('Invalid details', {
+      const resp = await loginUser(dispatch, email, password);
+      if (resp?.error) {
+        toast.error(resp?.error, {
           position: 'bottom-left',
           autoClose: 5000,
           hideProgressBar: false,
@@ -48,17 +33,13 @@ const Auth = () => {
           draggable: true,
           progress: undefined,
         });
-      }
-    } catch (error) {
-      var msg = "Authorization failed"
-      if (error instanceof AxiosError && typeof error.response !== 'undefined') {
-        if (error.response.status == 401)
-          msg = "Bad email or password"
-        else if (error.response.status == 0)
-          msg = "Server unavailable"
-      }
 
-      toast.error(msg, {
+        return;
+      }
+      history.replace(paths.main);
+    } catch (e) {
+      console.error(e)
+      toast.error("Authorization failed", {
         position: 'bottom-left',
         autoClose: 5000,
         hideProgressBar: false,
@@ -67,11 +48,9 @@ const Auth = () => {
         draggable: true,
         progress: undefined,
       });
-    } finally {
-      setBtnLoading(false);
+
     }
   };
-
   return (
     <Box
       display="flex"
@@ -129,7 +108,7 @@ const Auth = () => {
           variant="contained"
           color="primary"
           size="large"
-          disabled={btnLoading}
+          disabled={loading}
           fullWidth
         >
           Submit
