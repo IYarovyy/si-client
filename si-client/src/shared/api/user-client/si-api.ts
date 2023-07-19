@@ -1,4 +1,4 @@
-import { DefaultApi, DefaultApiFactory } from '../axios-client';
+import { DefaultApiFactory } from '../axios-client';
 import { IAuthTokens, TokenRefreshRequest, applyAuthTokenInterceptor} from 'axios-jwt'
 
 import { BASE_PATH } from '@shared/api/axios-client/base'
@@ -6,7 +6,7 @@ import { BASE_PATH } from '@shared/api/axios-client/base'
 
 import axios from 'axios';
 import globalAxios from 'axios';
-const axiosApiInstance = axios.create({ baseURL: BASE_PATH });
+export const axiosApiInstance = axios.create({ baseURL: BASE_PATH });
 
 
 
