@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { Action, LoginErrorAction, LoginSuccessAction, LogoutAction, RequestLoginAction } from "./reducer";
 import { siApi } from '@shared/api/user-client/si-api';
 import { AxiosError } from 'axios'
-import { isLoggedIn, setAuthTokens, clearAuthTokens, getAccessToken, getRefreshToken } from 'axios-jwt'
+import { setAuthTokens, clearAuthTokens } from 'axios-jwt'
 
 export async function loginUser(dispatch: Dispatch<Action>, email: string, password: string){
     try {

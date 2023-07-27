@@ -1,11 +1,9 @@
 import { FC } from 'react';
 import { useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { MuiFileInput } from "mui-file-input";
 import FormData from 'form-data'
-import { siApi, axiosApiInstance } from '@shared/api/user-client/si-api';
-import { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
-import { BASE_PATH } from '@shared/api/axios-client/base';
+import { siApi } from '@shared/api/user-client/si-api';
 
 const SoundCheck: FC = () => {
     const [file, setFile] = useState<File | null>(null)
@@ -25,10 +23,10 @@ const SoundCheck: FC = () => {
             data: formData
         }
         const resp = await siApi.predictPost(options)
-        setRecognizedSpeaker(resp.data.predictions[0].prediction[0])
+        setRecognizedSpeaker(resp.data.predictions[0]?.prediction[0])
     };
 
-    const handleChange = (value) => {
+    const handleChange = (value: File | null) => {
         setRecognizedSpeaker(null)
         setFile(value)
         // setAudio(URL.createObjectURL(value))
@@ -61,29 +59,27 @@ const SoundCheck: FC = () => {
                     />
                 </Box>
                 {file && (
-                <Box mb={2}>
-                     <audio
-                        controls 
-                        nodownload
-                        nofullscreen
-                        src={URL.createObjectURL(file)}
-                        style={{ width: '100%' }}>
-                    </audio>
-                </Box>
+                    <Box mb={2}>
+                        <audio
+                            controls
+                            src={URL.createObjectURL(file)}
+                            style={{ width: '100%' }}>
+                        </audio>
+                    </Box>
                 )}
-                {recognizedSpeaker &&(
-                <Box mb={2} bgcolor="#91e3bd">
-                    <Typography display="block" variant="h5" component="h5" align='center'>
-                    Voice of speracker: {recognizedSpeaker}
-                </Typography>
-                </Box>
-                ) }
+                {recognizedSpeaker && (
+                    <Box mb={2} bgcolor="#91e3bd">
+                        <Typography display="block" variant="h5" component="h5" align='center'>
+                            Voice of speracker: {recognizedSpeaker}
+                        </Typography>
+                    </Box>
+                )}
                 <Button
                     type="submit"
                     variant="contained"
                     color="primary"
                     size="large"
-                    disabled={!file || recognizedSpeaker}
+                    disabled={!!(!file || recognizedSpeaker)}
                     fullWidth
                 >
                     Recognize

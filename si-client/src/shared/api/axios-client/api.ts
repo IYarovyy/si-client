@@ -35,7 +35,7 @@ export interface AuthData {
     'access_token': string;
 }
 /**
- * 
+ * ErrorMsg(message: str)
  * @export
  * @interface ErrorMsg
  */
@@ -65,6 +65,38 @@ export interface LoginData {
      * @memberof LoginData
      */
     'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface Prediction
+ */
+export interface Prediction {
+    /**
+     * 
+     * @type {string}
+     * @memberof Prediction
+     */
+    'file': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Prediction
+     */
+    'prediction': Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface Predictions
+ */
+export interface Predictions {
+    /**
+     * 
+     * @type {Array<Prediction>}
+     * @memberof Predictions
+     */
+    'predictions': Array<Prediction>;
 }
 
 /**
@@ -341,7 +373,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async predictPost(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async predictPost(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Predictions>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.predictPost(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -410,7 +442,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        predictPost(options?: any): AxiosPromise<void> {
+        predictPost(options?: any): AxiosPromise<Predictions> {
             return localVarFp.predictPost(options).then((request) => request(axios, basePath));
         },
         /**

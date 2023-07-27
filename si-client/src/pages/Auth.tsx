@@ -1,5 +1,5 @@
 
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { FC } from "react";
 import { paths } from "../routes"
 
@@ -14,7 +14,7 @@ import { loginUser, useAuthState, useAuthDispatch } from '@contexts/index';
 const Auth: FC = () => {
   const history = useHistory();
   const dispatch = useAuthDispatch();
-  const { loading, errorMessage } = useAuthState();
+  const { loading } = useAuthState();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

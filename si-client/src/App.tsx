@@ -1,7 +1,7 @@
 import './App.css'
 import { AppBar, Box, Toolbar } from '@mui/material';
 import { paths } from './routes';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Auth from '@pages/Auth';
 import SoundCheck from '@pages/SoundCheck';
 import ProfileMenu from '@components/ProfileMenu'
